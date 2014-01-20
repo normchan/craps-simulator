@@ -5,9 +5,15 @@ import normchan.crapssim.simulation.Controller;
 import normchan.crapssim.simulation.strategy.ComePassStrategy;
 import normchan.crapssim.simulation.strategy.DontStrategy;
 import normchan.crapssim.simulation.strategy.FieldStrategy;
+import normchan.crapssim.simulation.strategy.HardWaysStrategy;
 import normchan.crapssim.simulation.strategy.MaxStrategy;
 import normchan.crapssim.simulation.strategy.OptimalStrategy1;
 import normchan.crapssim.simulation.strategy.OptimalStrategy2;
+import normchan.crapssim.simulation.strategy.PassAnyCrapStrategy;
+import normchan.crapssim.simulation.strategy.PassLineStrategy;
+import normchan.crapssim.simulation.strategy.ProgressiveRollStrategy;
+import normchan.crapssim.simulation.strategy.ProgressiveRollStrategy10;
+import normchan.crapssim.simulation.strategy.ProgressiveRollStrategy5;
 import normchan.crapssim.simulation.strategy.SuckerStrategy;
 
 public class GameManager {
@@ -21,20 +27,21 @@ public class GameManager {
 	
 	private boolean logGameDetails = true;
 	
-	public GameManager(Controller controller) {
+	public GameManager(Controller controller, Dice dice) {
 		this.controller = controller;
-		this.layout = new Layout();
+		this.layout = new Layout(dice);
 		this.player = new Player(INITIAL_BALANCE);
 
 		Logger logger = new Logger(this);
 		this.layout.addObserver(logger);
 		this.player.addObserver(logger);
 		
+		player.setStrategy(new ProgressiveRollStrategy10(player, layout));
 //		player.setStrategy(new MaxStrategy(player, layout));
 //		player.setStrategy(new SuckerStrategy(player, layout));
 //		player.setStrategy(new FieldStrategy(player, layout));
 //		player.setStrategy(new ComePassStrategy(player, layout));
-		player.setStrategy(new OptimalStrategy2(player, layout));
+//		player.setStrategy(new OptimalStrategy1(player, layout));
 	}
 	
 	public void run() {

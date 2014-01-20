@@ -6,7 +6,9 @@ import java.util.Observer;
 import normchan.crapssim.engine.Layout;
 import normchan.crapssim.engine.Player;
 import normchan.crapssim.engine.bets.HardWay;
+import normchan.crapssim.engine.bets.PassOrCome;
 import normchan.crapssim.engine.bets.Place;
+import normchan.crapssim.engine.util.BetNormalizer;
 
 public abstract class PlayerStrategy extends Observable implements Observer {
 	protected Player player;
@@ -19,17 +21,18 @@ public abstract class PlayerStrategy extends Observable implements Observer {
 	}
 	
 	protected void handlePlaceBet(int number, int amount) {
-		Place existing = layout.getPlaceOn(number);
-		if (existing != null) {
-			if (layout.getNumber() == number || layout.getComeOn(number) != null) {
-				existing.retractBet();
-			} else {
-				existing.updateBet(amount);
-			}
-		} else {
-			if (layout.getNumber() != number && layout.getComeOn(number) == null) {
+		amount = BetNormalizer.normalizePlaceBet(number, amount);
+		PassOrCome poc = layout.getPassOrComeOn(number);
+		Place place = layout.getPlaceOn(number);
+		
+		if (poc != null && place != null) {
+			place.retractBet();
+		} else if (poc == null) {
+			if (place == null) {
 //				System.out.println("Making new $"+amount+" place bet on "+number+".");
 				layout.addBet(new Place(layout, player, amount, number));
+			} else {
+				place.updateBet(amount);
 			}
 		}
 	}

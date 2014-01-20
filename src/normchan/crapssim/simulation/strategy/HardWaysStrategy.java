@@ -11,8 +11,10 @@ public class HardWaysStrategy extends PlayerStrategy {
 
 	@Override
 	public void bet() {
-		// TODO Auto-generated method stub
-
+		handleHardWayBet(6, 5);
+		handleHardWayBet(8, 5);
+		handleHardWayBet(4, 5);
+		handleHardWayBet(10, 5);
 	}
 
 }

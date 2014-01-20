@@ -8,8 +8,8 @@ import normchan.crapssim.engine.event.GameEvent;
 
 public class Dice extends Observable {
 	private final Random randomizer;
-	private int die1 = 1;
-	private int die2 = 1;
+	protected int die1 = 1;
+	protected int die2 = 1;
 	
 	public Dice() {
 		randomizer = new Random(new Date().getTime());
@@ -18,6 +18,10 @@ public class Dice extends Observable {
 	public void roll() {
 		die1 = randomizer.nextInt(6) + 1;
 		die2 = randomizer.nextInt(6) + 1;
+		announceRoll();
+	}
+	
+	protected void announceRoll() {
 		setChanged();
 		notifyObservers(new GameEvent("The roll is "+getTotal()+(isHardWay() ? " (the hard way)" : "")));
 	}

@@ -4,6 +4,7 @@ import normchan.crapssim.engine.Layout;
 import normchan.crapssim.engine.Player;
 import normchan.crapssim.engine.event.BetEvent;
 import normchan.crapssim.engine.exception.InvalidBetException;
+import normchan.crapssim.engine.util.BetNormalizer;
 
 public abstract class PassOrCome extends Bet implements NumberBet {
 	protected int oddsBet = 0;
@@ -93,8 +94,14 @@ public abstract class PassOrCome extends Bet implements NumberBet {
 	public int getOddsBet() {
 		return oddsBet;
 	}
+	
+	@Override
+	public int getTotalAmount() {
+		return mainBet + oddsBet;
+	}
 
 	public void updateOddsBet(int oddsBet) {
+		oddsBet = BetNormalizer.normalizeOddsBet(number, oddsBet);
 		if (number != 0 && this.oddsBet != oddsBet) {
 			notifyObservers(new BetEvent(BetEvent.EventType.UPDATE, "Updating "+this+" to odds of $"+oddsBet));
 			if (oddsBet > getMaxOddsBet())

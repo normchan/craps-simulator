@@ -10,19 +10,22 @@ import normchan.crapssim.engine.bets.Bet;
 import normchan.crapssim.engine.bets.Come;
 import normchan.crapssim.engine.bets.HardWay;
 import normchan.crapssim.engine.bets.NumberBet;
+import normchan.crapssim.engine.bets.PassLine;
+import normchan.crapssim.engine.bets.PassOrCome;
 import normchan.crapssim.engine.bets.Place;
 import normchan.crapssim.engine.event.GameEvent;
 import normchan.crapssim.engine.event.NewBetEvent;
+import normchan.crapssim.engine.event.SevenOutEvent;
 
 public class Layout extends Observable {
 	private List<Bet> bets;
 	private final Dice dice;
 	private int number = 0;
 
-	public Layout() {
+	public Layout(Dice dice) {
 		super();
 		this.bets = new ArrayList<Bet>();
-		this.dice = new Dice();
+		this.dice = dice == null ? new Dice() : dice;
 	}
 	
 	@Override
@@ -32,7 +35,12 @@ public class Layout extends Observable {
 	}
 
 	public void roll() {
+		listBets();
 		dice.roll();
+		if (isNumberEstablished() && dice.getTotal() == 7) {
+			setChanged();
+			notifyObservers(new SevenOutEvent("Seven Out!"));
+		}
 		
 		Iterator<Bet> iterator = bets.iterator();
 		while (iterator.hasNext()) {
@@ -60,8 +68,32 @@ public class Layout extends Observable {
 		notifyObservers(new GameEvent("All bets paid. "+message+"\n"));
 	}
 	
+	private void listBets() {
+		String message = "All bets:\n";
+		for (Bet bet : bets) {
+			message += bet + "\n";
+		}
+		setChanged();
+		notifyObservers(new GameEvent(message));
+	}
+	
 	public List<Bet> getBets() {
 		return bets;
+	}
+	
+	public int getAmountAtRisk() {
+		int amount = 0;
+		for (Bet bet : bets) {
+			amount += bet.getTotalAmount();
+		}
+		return amount;
+	}
+	
+	public PassLine getPassLine() {
+		for (Bet bet : bets) {
+			if (bet instanceof PassLine) return (PassLine)bet;
+		}
+		return null;
 	}
 	
 	public NumberBet getNumberBetOn(Class clazz, int number) {
@@ -77,6 +109,10 @@ public class Layout extends Observable {
 	
 	public Place getPlaceOn(int number) {
 		return (Place)getNumberBetOn(Place.class, number);
+	}
+	
+	public PassOrCome getPassOrComeOn(int number) {
+		return (PassOrCome)getNumberBetOn(PassOrCome.class, number);
 	}
 	
 	public Come getComeOn(int number) {

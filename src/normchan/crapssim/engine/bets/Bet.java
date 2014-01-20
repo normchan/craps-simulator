@@ -50,6 +50,10 @@ public abstract class Bet extends Observable {
 	public int getMainBet() {
 		return mainBet;
 	}
+	
+	public int getTotalAmount() {
+		return mainBet;
+	}
 
 	public void retractBet() {
 		notifyObservers(new BetEvent(BetEvent.EventType.RETRACT, "Retracting "+getClass().getSimpleName()+" bet."));

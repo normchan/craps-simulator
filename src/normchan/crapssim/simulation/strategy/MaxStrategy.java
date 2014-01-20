@@ -31,10 +31,16 @@ public class MaxStrategy extends PlayerStrategy {
 				}
 			}
 
+			handlePlaceBet(4, 10);
+			handlePlaceBet(5, 10);
 			handlePlaceBet(6, 12);
 			handlePlaceBet(8, 12);
+			handlePlaceBet(9, 10);
+			handlePlaceBet(10, 10);
 			
 			handleHardWayBet(4, 5);
+			handleHardWayBet(6, 5);
+			handleHardWayBet(8, 5);
 			handleHardWayBet(10, 5);
 		}
 		
