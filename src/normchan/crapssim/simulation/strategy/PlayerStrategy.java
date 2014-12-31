@@ -5,7 +5,9 @@ import java.util.Observer;
 
 import normchan.crapssim.engine.Layout;
 import normchan.crapssim.engine.Player;
+import normchan.crapssim.engine.bets.Buy;
 import normchan.crapssim.engine.bets.HardWay;
+import normchan.crapssim.engine.bets.Lay;
 import normchan.crapssim.engine.bets.PassOrCome;
 import normchan.crapssim.engine.bets.Place;
 import normchan.crapssim.engine.util.BetNormalizer;
@@ -33,6 +35,38 @@ public abstract class PlayerStrategy extends Observable implements Observer {
 				layout.addBet(new Place(layout, player, amount, number));
 			} else {
 				place.updateBet(amount);
+			}
+		}
+	}
+	
+	protected void handleBuyBet(int number, int amount) {
+		amount = BetNormalizer.normalizeBuyBet(number, amount);
+		PassOrCome poc = layout.getPassOrComeOn(number);
+		Buy buy = layout.getBuyOn(number);
+		
+		if (poc != null && buy != null) {
+			buy.retractBet();
+		} else if (poc == null) {
+			if (buy == null) {
+				layout.addBet(new Buy(layout, player, amount, number));
+			} else {
+				buy.updateBet(amount);
+			}
+		}
+	}
+	
+	protected void handleLayBet(int number, int amount) {
+		amount = BetNormalizer.normalizeLayBet(number, amount);
+		PassOrCome poc = layout.getPassOrComeOn(number);
+		Lay lay = layout.getLayOn(number);
+		
+		if (poc != null && lay != null) {
+			lay.retractBet();
+		} else if (poc == null) {
+			if (lay == null) {
+				layout.addBet(new Lay(layout, player, amount, number));
+			} else {
+				lay.updateBet(amount);
 			}
 		}
 	}

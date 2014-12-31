@@ -7,8 +7,10 @@ import java.util.Observable;
 import java.util.Observer;
 
 import normchan.crapssim.engine.bets.Bet;
+import normchan.crapssim.engine.bets.Buy;
 import normchan.crapssim.engine.bets.Come;
 import normchan.crapssim.engine.bets.HardWay;
+import normchan.crapssim.engine.bets.Lay;
 import normchan.crapssim.engine.bets.NumberBet;
 import normchan.crapssim.engine.bets.PassLine;
 import normchan.crapssim.engine.bets.PassOrCome;
@@ -109,6 +111,14 @@ public class Layout extends Observable {
 	
 	public Place getPlaceOn(int number) {
 		return (Place)getNumberBetOn(Place.class, number);
+	}
+
+	public Buy getBuyOn(int number) {
+		return (Buy)getNumberBetOn(Buy.class, number);
+	}
+
+	public Lay getLayOn(int number) {
+		return (Lay)getNumberBetOn(Lay.class, number);
 	}
 	
 	public PassOrCome getPassOrComeOn(int number) {

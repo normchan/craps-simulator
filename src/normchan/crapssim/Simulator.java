@@ -15,7 +15,7 @@ public class Simulator {
 	private static GameManager manager;
 	private static List<PlayerTracker> trackers = new ArrayList<PlayerTracker>();
 
-	private final static int[][] DICE_SEQUENCE = { {3, 6}, {3, 3}, {5, 4}, {2, 5}, {6, 2}, {4, 4} };
+	private final static int[][] DICE_SEQUENCE = { {3, 6}, {3, 3}, {4, 5}, {2, 2}, {2, 5}, {6, 2}, {4, 4} };
 	
 	public static void main(String[] args) {
 //		controller = new SimpleController();

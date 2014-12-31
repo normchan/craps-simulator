@@ -13,13 +13,15 @@ public abstract class Bet extends Observable {
 	protected final Layout layout;
 	protected final Player player;
 	protected int mainBet;
+	protected int price;
 
 	public Bet(Layout layout, Player player, int bet) {
 		this.layout = layout;
 		this.player = player;
 		this.mainBet = bet;
+		this.price = calculatePrice(mainBet);
 		
-		player.deduct(bet);
+		player.deduct(price);
 	}
 	
 	protected void checkBetLimits() {
@@ -52,20 +54,33 @@ public abstract class Bet extends Observable {
 	}
 	
 	public int getTotalAmount() {
-		return mainBet;
+		return price;
+	}
+	
+	protected int calculatePrice(int bet) {
+		return bet;
+	}
+
+	protected int calculateVig(int amount) {
+		int commission = amount / 20;
+		if (commission == 0 || ((float)amount / 20) - commission > 0.5) 
+			commission++;
+		return commission;
 	}
 
 	public void retractBet() {
 		notifyObservers(new BetEvent(BetEvent.EventType.RETRACT, "Retracting "+getClass().getSimpleName()+" bet."));
 		layout.removeBet(this);
-		player.payOff(mainBet);
+		player.payOff(price);
 	}	
 	
 	public void updateBet(int amount) {
 		if (mainBet != amount) {
 			notifyObservers(new BetEvent(BetEvent.EventType.UPDATE, "Updating "+this+" to $"+amount));
-			player.deduct(amount - this.mainBet);
+			int newPrice = calculatePrice(amount);
+			player.deduct(newPrice - amount);
 			this.mainBet = amount;
+			this.price = newPrice;
 		}
 	}
 	

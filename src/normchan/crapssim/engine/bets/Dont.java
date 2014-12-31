@@ -3,10 +3,9 @@ package normchan.crapssim.engine.bets;
 import normchan.crapssim.engine.Layout;
 import normchan.crapssim.engine.Player;
 import normchan.crapssim.engine.event.BetEvent;
-import normchan.crapssim.engine.event.GameEvent;
 import normchan.crapssim.engine.exception.InvalidBetException;
 
-public class Dont extends Bet {
+public class Dont extends Bet implements NumberBet {
 	protected int oddsBet = 0;
 	protected int number = 0;
 

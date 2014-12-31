@@ -2,10 +2,12 @@ package normchan.crapssim.engine;
 
 import normchan.crapssim.engine.exception.BankruptException;
 import normchan.crapssim.simulation.Controller;
+import normchan.crapssim.simulation.strategy.BuyStrategy;
 import normchan.crapssim.simulation.strategy.ComePassStrategy;
 import normchan.crapssim.simulation.strategy.DontStrategy;
 import normchan.crapssim.simulation.strategy.FieldStrategy;
 import normchan.crapssim.simulation.strategy.HardWaysStrategy;
+import normchan.crapssim.simulation.strategy.LayStrategy;
 import normchan.crapssim.simulation.strategy.MaxStrategy;
 import normchan.crapssim.simulation.strategy.OptimalStrategy1;
 import normchan.crapssim.simulation.strategy.OptimalStrategy2;
@@ -36,12 +38,15 @@ public class GameManager {
 		this.layout.addObserver(logger);
 		this.player.addObserver(logger);
 		
-		player.setStrategy(new ProgressiveRollStrategy10(player, layout));
+//		player.setStrategy(new ProgressiveRollStrategy10(player, layout));
 //		player.setStrategy(new MaxStrategy(player, layout));
 //		player.setStrategy(new SuckerStrategy(player, layout));
-//		player.setStrategy(new FieldStrategy(player, layout));
+		player.setStrategy(new FieldStrategy(player, layout));
 //		player.setStrategy(new ComePassStrategy(player, layout));
 //		player.setStrategy(new OptimalStrategy1(player, layout));
+//		player.setStrategy(new OptimalStrategy2(player, layout));
+//		player.setStrategy(new BuyStrategy(player, layout));
+//		player.setStrategy(new LayStrategy(player, layout));
 	}
 	
 	public void run() {
