@@ -1,63 +1,74 @@
 package normchan.crapssim;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import normchan.crapssim.engine.Dice;
 import normchan.crapssim.engine.GameManager;
-import normchan.crapssim.engine.LoadedDice;
 import normchan.crapssim.simulation.Controller;
-import normchan.crapssim.simulation.SimpleController;
+import normchan.crapssim.simulation.strategy.MaxStrategy2;
+import normchan.crapssim.simulation.strategy.ProgressiveHedgeStrategy10;
+import normchan.crapssim.simulation.tracker.ComparisonTracker;
 import normchan.crapssim.simulation.tracker.PlayerTracker;
+import normchan.crapssim.simulation.tracker.Tracker;
 
 public class Simulator {
-	private final static int TOTAL_SIMULATION_RUNS = 100;
-	private static Controller controller;
-	private static GameManager manager;
-	private static List<PlayerTracker> trackers = new ArrayList<PlayerTracker>();
+	private final static int TOTAL_SIMULATION_RUNS = 4;
+	private static List<GameManager> managers = new ArrayList<GameManager>();
+	private static Tracker tracker = null;
 
-	private final static int[][] DICE_SEQUENCE = { {3, 6}, {3, 3}, {4, 5}, {2, 2}, {2, 5}, {6, 2}, {4, 4} };
+	private final static int[][] DICE_SEQUENCE = { {3, 5}, {5, 3}, {2, 2}, {3, 3}, {1, 3}, {1, 5}, {4, 4}, {2, 2}, {2, 5}, {6, 2}, {4, 4} };
+//	private final static Class[] STRATEGIES = { ProgressiveHedgeStrategy10.class };
+	private final static Class[] STRATEGIES = { ProgressiveHedgeStrategy10.class, MaxStrategy2.class };
 	
 	public static void main(String[] args) {
-//		controller = new SimpleController();
-		controller = new Controller();
-		manager = new GameManager(controller, null);
-//		manager = new GameManager(controller, new LoadedDice(DICE_SEQUENCE));
-//		manager.setLogGameDetails(false);
-		initializeTrackers();
+		Dice dice = null;
+//		dice = new LoadedDice(DICE_SEQUENCE);
+		List<Class> playerStrategyClasses = Arrays.asList( STRATEGIES );
+		for (Class playerStrategyClass : playerStrategyClasses) {
+			try {
+				GameManager manager = new GameManager(dice, playerStrategyClass);
+				manager.setLogGameDetails(true);
+				managers.add(manager);
+			} catch (Exception e) {
+				System.err.println("Failed to instantiate GameManager using "+playerStrategyClass.getName()+" class, exiting...");
+				e.printStackTrace();
+				System.exit(1);
+			}
+		}
 
-		for (int i = 0; i < TOTAL_SIMULATION_RUNS; i++) {
-			setup();
-			manager.run();
-			takedown();
+		if (playerStrategyClasses.size() == 1) {
+			tracker = new PlayerTracker(managers.get(0).getPlayer(), GameManager.INITIAL_BALANCE);
+		} else if (playerStrategyClasses.size() == 2) {
+			tracker = new ComparisonTracker(managers.get(0).getPlayer(), managers.get(1).getPlayer(), GameManager.INITIAL_BALANCE);
+		} else {
+			System.err.println("Invalid number of strategies classes specified ("+playerStrategyClasses.size()+"), exiting...");
+			System.exit(1);
 		}
 		
+		for (GameManager manager : managers) {
+			for (int i = 0; i < TOTAL_SIMULATION_RUNS; i++) {
+				Controller controller = setup(manager);
+				controller.run();
+			}
+			System.out.println(TOTAL_SIMULATION_RUNS+" runs complete with "+manager.getPlayer().getStrategy().getClass().getSimpleName()+".");
+		}
+
 		summarizeData();
 	}
 	
-	private static void initializeTrackers() {
-		trackers.add(new PlayerTracker());
-		for (PlayerTracker tracker : trackers) {
-			tracker.setPlayer(manager.getPlayer());
-		}
-	}
-	
 	private static void summarizeData() {
-		System.out.println(TOTAL_SIMULATION_RUNS+" runs complete with "+manager.getPlayer().getStrategy().getClass().getSimpleName()+".");
-		for (PlayerTracker tracker : trackers) {
-			tracker.calculateStats();
-			tracker.printResults(System.out);
-		}
+		tracker.calculateStats();
+		tracker.printResults(System.out);
 	}
 	
-	private static void setup() {
+	private static Controller setup(GameManager manager) {
 		manager.resetPlayer();
+//		controller = new SimpleController();
+		Controller controller = new Controller();
 		controller.setManager(manager);
 		controller.reset();
-	}
-
-	private static void takedown() {
-		for (PlayerTracker tracker : trackers) {
-			tracker.runComplete();
-		}
+		return controller;
 	}
 }

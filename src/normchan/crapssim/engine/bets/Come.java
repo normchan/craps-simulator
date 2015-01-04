@@ -19,7 +19,7 @@ public class Come extends PassOrCome {
 
 	@Override
 	protected void betWon() {
-		if (!layout.isNumberEstablished() && oddsBet > 0) // Odds are off by default
+		if (!oddsWorkingOnComeOut && !layout.isNumberEstablished() && oddsBet > 0) // Odds are off by default
 			super.betWon(mainBet*2 + oddsBet);
 		else
 			super.betWon();
@@ -33,5 +33,17 @@ public class Come extends PassOrCome {
 			player.payOff(oddsBet);
 		} else
 			super.betLost();
+	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName()+" bet "+modifier()+(number == 0 ? "" : "on "+number+" ")+"worth $"+mainBet+(oddsBet > 0 ? " with $"+oddsBet+" odds" : "");
+	}
+
+	private String modifier() {
+		if (this.oddsWorkingOnComeOut && !layout.isNumberEstablished())
+			return "(odds working) ";
+		else 
+			return "";
 	}
 }

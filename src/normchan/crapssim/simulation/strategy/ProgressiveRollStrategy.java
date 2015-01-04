@@ -32,13 +32,17 @@ public abstract class ProgressiveRollStrategy extends PlayerStrategy {
 		} else {
 			handlePlaceBet(6, unitSize);
 			handlePlaceBet(8, unitSize);
-			beforeRollWithPoint();
 		}
+		beforeRoll();
 	}
 	
 	protected void addBet(Bet bet) {
 		layout.addBet(bet);
 		bet.addObserver(this);
+	}
+	
+	protected int getCurrentWinLoss() {
+		return player.getBalance() - startBalance;
 	}
 	
 	protected boolean shouldBetCome(int winLoss) {
@@ -62,5 +66,5 @@ public abstract class ProgressiveRollStrategy extends PlayerStrategy {
 	protected void handleNumberEstablished(PassOrCome bet) {
 	}
 
-	protected abstract void beforeRollWithPoint();
+	protected abstract void beforeRoll();
 }

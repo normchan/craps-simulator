@@ -15,16 +15,14 @@ public class ProgressiveRollStrategy10 extends ProgressiveRollStrategy {
 	}
 
 	@Override
-	protected void beforeRollWithPoint() {
-		int currentWinLoss = player.getBalance() - startBalance;
-		
+	protected void beforeRoll() {
 		for (Bet bet : layout.getBets()) {
 			if (bet instanceof PassOrCome) {
 				PassOrCome poc = (PassOrCome)bet;
 				if (poc.isNumberEstablished()) {
-					if (currentWinLoss < INCREASE_ODDS_FOLD * unitSize) {
+					if (getCurrentWinLoss() < INCREASE_ODDS_FOLD * unitSize) {
 						poc.updateOddsBet(startingOdds(poc.getNumber()));
-					} else if (currentWinLoss < MAX_ODDS_FOLD * unitSize) {
+					} else if (getCurrentWinLoss() < MAX_ODDS_FOLD * unitSize) {
 						poc.updateOddsBet(startingOdds(poc.getNumber()) + unitSize);
 					} else {
 						poc.updateOddsBet(poc.getMaxOddsBet());
@@ -33,9 +31,9 @@ public class ProgressiveRollStrategy10 extends ProgressiveRollStrategy {
 			}
 		}
 
-		System.out.println("Start balance: "+startBalance+" current balance: "+player.getBalance());
-		if (shouldBetCome(currentWinLoss)) {
-			addBet(new Come(layout, player, unitSize));
+//		System.out.println("Start balance: "+startBalance+" current balance: "+player.getBalance());
+		if (layout.isNumberEstablished() && shouldBetCome(getCurrentWinLoss())) {
+			addBet(new Come(layout, player, unitSize, true));
 		}
 	}
 	

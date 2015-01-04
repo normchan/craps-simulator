@@ -3,6 +3,7 @@ package normchan.crapssim.engine;
 import java.util.Observable;
 
 import normchan.crapssim.engine.event.GameEvent;
+import normchan.crapssim.engine.event.SessionEvent;
 import normchan.crapssim.engine.exception.BankruptException;
 import normchan.crapssim.simulation.strategy.PlayerStrategy;
 
@@ -39,16 +40,37 @@ public class Player extends Observable {
 		if (balance - amount < 0)
 			throw new BankruptException("Player has insufficient funds.");
 		balance -= amount;
-		setChanged();
 		notifyObservers(new GameEvent("Player balance is $"+balance));
 	}
 	
 	public void payOff(int amount) {
 		balance += amount;
-		setChanged();
 		notifyObservers(new GameEvent("Player balance is $"+balance));
 	}
 
+	public void sendStatusUpdate() {
+		if (isBroke()) {
+			notifyObservers(new GameEvent("Player is broke!"));
+		} else {
+			notifyObservers(new GameEvent("Player balance is $"+balance));
+		}
+	}
+	
+	public void sessionStart() {
+		notifyObservers(new SessionEvent(SessionEvent.EventType.BEGIN, "New session starting..."));
+	}
+	
+	public void sessionComplete() {
+		notifyObservers(new SessionEvent(SessionEvent.EventType.END, "Session complete."));
+
+		sendStatusUpdate();
+	}
+	
+	private void notifyObservers(GameEvent event) {
+		setChanged();
+		super.notifyObservers(event);
+	}
+	
 	public PlayerStrategy getStrategy() {
 		return strategy;
 	}

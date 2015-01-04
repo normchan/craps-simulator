@@ -1,70 +1,30 @@
 package normchan.crapssim.engine;
 
-import normchan.crapssim.engine.exception.BankruptException;
-import normchan.crapssim.simulation.Controller;
-import normchan.crapssim.simulation.strategy.BuyStrategy;
-import normchan.crapssim.simulation.strategy.ComePassStrategy;
-import normchan.crapssim.simulation.strategy.DontStrategy;
-import normchan.crapssim.simulation.strategy.FieldStrategy;
-import normchan.crapssim.simulation.strategy.HardWaysStrategy;
-import normchan.crapssim.simulation.strategy.LayStrategy;
-import normchan.crapssim.simulation.strategy.MaxStrategy;
-import normchan.crapssim.simulation.strategy.OptimalStrategy1;
-import normchan.crapssim.simulation.strategy.OptimalStrategy2;
-import normchan.crapssim.simulation.strategy.PassAnyCrapStrategy;
-import normchan.crapssim.simulation.strategy.PassLineStrategy;
-import normchan.crapssim.simulation.strategy.ProgressiveRollStrategy;
-import normchan.crapssim.simulation.strategy.ProgressiveRollStrategy10;
-import normchan.crapssim.simulation.strategy.ProgressiveRollStrategy5;
-import normchan.crapssim.simulation.strategy.SuckerStrategy;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+import normchan.crapssim.simulation.strategy.PlayerStrategy;
 
 public class GameManager {
-	private static int INITIAL_BALANCE = 1000;
+	public static int INITIAL_BALANCE = 5000;
 	public static int MIN_BET = 5;
 	public static int MAX_BET = 2000;
 
-	private final Controller controller;
 	private final Player player;
 	private final Layout layout;
 	
 	private boolean logGameDetails = true;
 	
-	public GameManager(Controller controller, Dice dice) {
-		this.controller = controller;
+	public GameManager(Dice dice, Class<? extends PlayerStrategy> playerStrategyClass) throws SecurityException, NoSuchMethodException, IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException {
 		this.layout = new Layout(dice);
 		this.player = new Player(INITIAL_BALANCE);
+
+		Constructor<? extends PlayerStrategy> constructor = playerStrategyClass.getConstructor(Player.class, Layout.class);
+		this.player.setStrategy((PlayerStrategy)constructor.newInstance(player, layout));
 
 		Logger logger = new Logger(this);
 		this.layout.addObserver(logger);
 		this.player.addObserver(logger);
-		
-//		player.setStrategy(new ProgressiveRollStrategy10(player, layout));
-//		player.setStrategy(new MaxStrategy(player, layout));
-//		player.setStrategy(new SuckerStrategy(player, layout));
-		player.setStrategy(new FieldStrategy(player, layout));
-//		player.setStrategy(new ComePassStrategy(player, layout));
-//		player.setStrategy(new OptimalStrategy1(player, layout));
-//		player.setStrategy(new OptimalStrategy2(player, layout));
-//		player.setStrategy(new BuyStrategy(player, layout));
-//		player.setStrategy(new LayStrategy(player, layout));
-	}
-	
-	public void run() {
-		try {
-			while (!controller.isSimulationComplete() && !player.isBroke()) {
-				player.makeBet();
-				layout.roll();
-			}
-		} catch (BankruptException e) {
-			// TODO: handle this in the course of play and just stop betting and let the rolls play out
-			player.setBalance(0);
-		}
-		
-		if (player.isBroke()) {
-			System.out.println("Player is broke!");
-		} else {
-			System.out.println("Player balance is $"+player.getBalance());
-		}
 	}
 	
 	public void resetPlayer() {

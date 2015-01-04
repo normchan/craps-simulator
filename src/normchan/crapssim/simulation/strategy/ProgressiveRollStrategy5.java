@@ -11,9 +11,9 @@ public class ProgressiveRollStrategy5 extends ProgressiveRollStrategy {
 	}
 
 	@Override
-	protected void beforeRollWithPoint() {
-		System.out.println("Start balance: "+startBalance+" current balance: "+player.getBalance());
-		if (shouldBetCome(player.getBalance() - startBalance)) {
+	protected void beforeRoll() {
+//		System.out.println("Start balance: "+startBalance+" current balance: "+player.getBalance());
+		if (layout.isNumberEstablished() && shouldBetCome(player.getBalance() - startBalance)) {
 			addBet(new Come(layout, player, unitSize));
 		}
 	}

@@ -12,6 +12,7 @@ import normchan.crapssim.engine.bets.Come;
 import normchan.crapssim.engine.bets.PassLine;
 import normchan.crapssim.engine.bets.PassOrCome;
 import normchan.crapssim.engine.event.BetEvent;
+import normchan.crapssim.engine.event.SevenOutEvent;
 
 public class OptimalStrategy1 extends PlayerStrategy {
 	private static final int STARTING_ODDS = 1;
@@ -38,11 +39,9 @@ public class OptimalStrategy1 extends PlayerStrategy {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		if (o instanceof Dice) {
-			if (((Dice)o).getTotal() == 7 && layout.isNumberEstablished()) {
-//				System.out.println("Sevened out, clearing all bet history.");
-				lastBets.clear();
-			}
+		if (arg instanceof SevenOutEvent) {
+//			System.out.println("Sevened out, clearing all bet history.");
+			lastBets.clear();
 		} else if (o instanceof PassOrCome) {
 			if (((BetEvent)arg).getType() == BetEvent.EventType.NUMBER_ESTABLISHED) {
 				PassOrCome bet = (PassOrCome)o;
