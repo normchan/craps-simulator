@@ -40,10 +40,6 @@ public class PlayerTracker implements Tracker, Observer {
 		player.addObserver(this);
 	}
 
-	public void runComplete() {
-		balances.add(new Integer(player.getBalance()));
-	}
-	
 	@Override
 	public void printResults(PrintStream stream) {
 		Formatter formatter = new Formatter(stream);

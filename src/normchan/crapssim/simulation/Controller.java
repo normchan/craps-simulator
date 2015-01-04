@@ -1,11 +1,9 @@
 package normchan.crapssim.simulation;
 
-import java.util.Observable;
-
 import normchan.crapssim.engine.GameManager;
 import normchan.crapssim.engine.exception.BankruptException;
 
-public class Controller extends Observable {
+public class Controller {
 	protected GameManager manager;
 	private int counter = 0;
 	private boolean numberPuckOn = false;

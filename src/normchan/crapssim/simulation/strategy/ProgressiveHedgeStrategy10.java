@@ -38,7 +38,6 @@ public class ProgressiveHedgeStrategy10 extends ProgressiveRollStrategy10 {
 		} else if (arg instanceof BetEvent) {
 			BetEvent.EventType eventType = ((BetEvent)arg).getType();
 
-//			System.out.println("Betevent type: "+eventType+" for "+o);
 			if (o == hedgeBet && (eventType == BetEvent.EventType.WIN || eventType == BetEvent.EventType.LOSS)) {
 				this.hedgeBet = null;
 				this.hedgeComplete = true;
