@@ -17,6 +17,7 @@ import normchan.crapssim.engine.bets.PassOrCome;
 import normchan.crapssim.engine.bets.Place;
 import normchan.crapssim.engine.event.GameEvent;
 import normchan.crapssim.engine.event.NewBetEvent;
+import normchan.crapssim.engine.event.RollCompleteEvent;
 import normchan.crapssim.engine.event.SevenOutEvent;
 
 public class Layout extends Observable {
@@ -39,10 +40,6 @@ public class Layout extends Observable {
 	public void roll() {
 		listBets();
 		dice.roll();
-		if (isNumberEstablished() && dice.getTotal() == 7) {
-			setChanged();
-			notifyObservers(new SevenOutEvent("Seven Out!"));
-		}
 		
 		Iterator<Bet> iterator = bets.iterator();
 		while (iterator.hasNext()) {
@@ -52,22 +49,29 @@ public class Layout extends Observable {
 			}
 		}
 
-		updateState();
+		updateState(isNumberEstablished() && dice.getTotal() == 7);
 	}
 	
-	private void updateState() {
-		if (number == 0) {
+	private void updateState(boolean sevenedOut) {
+		if (isNumberEstablished()) {
+			if (dice.getTotal() == 7 || dice.getTotal() == number)
+				number = 0;
+		} else {
 			if ((dice.getTotal() >= 4 && dice.getTotal() <= 6) ||
 				(dice.getTotal() >= 8 && dice.getTotal() <= 10))
 				number = dice.getTotal();
-		} else {
-			if (dice.getTotal() == 7 || dice.getTotal() == number)
-				number = 0;
 		}
-		
-		String message = number == 0 ? "Coming out roll!" : "The point is "+number+"!";
+
+		RollCompleteEvent event = null;
+		if (sevenedOut) {
+			event = new SevenOutEvent("Seven Out! All bets paid.\n");
+		} else {
+			String message = isNumberEstablished() ? "The point is "+number+"!" : "Coming out roll!";
+			event = new RollCompleteEvent("All bets paid. "+message+"\n");
+		}
+
 		setChanged();
-		notifyObservers(new GameEvent("All bets paid. "+message+"\n"));
+		notifyObservers(event);
 	}
 	
 	private void listBets() {

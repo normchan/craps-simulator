@@ -28,6 +28,22 @@ public class LoadedDice extends Dice {
 		}
 	}
 	
+	@Override
+	public boolean toggleTrickDice() {
+		// Can only turn trick mode off
+		boolean previous = false;
+		if (!pairs.isEmpty()) {
+			previous = true;
+			pairs.clear();
+		}
+		return previous;
+	}
+
+	@Override
+	public boolean isTrickDice() {
+		return !pairs.isEmpty();
+	}
+
 	private static class TestObserver implements Observer {
 
 		@Override

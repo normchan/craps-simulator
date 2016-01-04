@@ -2,7 +2,7 @@ package normchan.crapssim.engine.event;
 
 public class BetEvent extends GameEvent {
 	public enum EventType {
-		UPDATE, RETRACT, WIN, LOSS, PUSH, NUMBER_ESTABLISHED
+		UPDATE, RETRACT, WIN, LOSS, PUSH, NUMBER_ESTABLISHED, POINT_MADE
 	}
 	
 	private final EventType type;

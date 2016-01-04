@@ -61,6 +61,7 @@ public abstract class ProgressiveRollStrategy extends PlayerStrategy {
 				handleNumberEstablished((PassOrCome)o);
 			}
 		}
+		super.update(o, arg);
 	}
 	
 	protected void handleNumberEstablished(PassOrCome bet) {

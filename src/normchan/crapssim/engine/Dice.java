@@ -16,9 +16,13 @@ public class Dice extends Observable {
 	}
 	
 	public void roll() {
+		shakeDice();
+		announceRoll();
+	}
+	
+	protected void shakeDice() {
 		die1 = randomizer.nextInt(6) + 1;
 		die2 = randomizer.nextInt(6) + 1;
-		announceRoll();
 	}
 	
 	protected void announceRoll() {
@@ -42,5 +46,13 @@ public class Dice extends Observable {
 		if (getTotal() == 2 || getTotal() == 12)
 			return false;
 		return (die1 == die2);
+	}
+	
+	public boolean toggleTrickDice() {
+		return false;
+	}
+	
+	public boolean isTrickDice() {
+		return false;
 	}
 }
