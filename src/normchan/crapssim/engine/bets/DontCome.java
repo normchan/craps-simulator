@@ -29,7 +29,7 @@ public class DontCome extends Dont {
 	protected void betLost() {
 		if (!oddsWorkingOnComeOut && !layout.isNumberEstablished() && oddsBet > 0) {
 			// Odds are not working on come out roll
-			notifyObservers(new BetEvent(BetEvent.EventType.LOSS, this+" lost.  Odds are off, returning to player"));
+			notifyObservers(new BetEvent(BetEvent.EventType.LOSS, this+" lost.  Odds are off, returning to player", getMainBet()));
 			player.payOff(oddsBet);
 		} else
 			super.betLost();

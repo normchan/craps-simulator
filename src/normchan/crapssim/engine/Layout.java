@@ -37,6 +37,12 @@ public class Layout extends Observable {
 		super.addObserver(o);
 	}
 
+	@Override
+	public synchronized void deleteObserver(Observer o) {
+		dice.deleteObserver(o);
+		super.deleteObserver(o);
+	}
+
 	public void roll() {
 		listBets();
 		dice.roll();

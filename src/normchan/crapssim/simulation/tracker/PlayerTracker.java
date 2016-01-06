@@ -45,10 +45,14 @@ public class PlayerTracker implements Tracker, Observer {
 		Formatter formatter = new Formatter(stream);
 		formatter.format("Player ended with an average balance of $%.2f (started with $%d)\n", stats.mean, initialBalance);
 		formatter.format("Player ended with an standard deviation of $%.2f\n", stats.stdDeviation);
-		formatter.format("Player's biggest win: $%d\n", stats.max - initialBalance);
-		formatter.format("Player's largest loss: $%d\n", initialBalance - stats.min);
-		formatter.format("Player won on average $%.2f\n", stats.avgWinningBalance - initialBalance);
-		formatter.format("Player lost on average $%.2f\n", initialBalance - stats.avgLosingBalance);
+		if (stats.wins > 0) {
+			formatter.format("Player's biggest win: $%d\n", stats.max - initialBalance);
+			formatter.format("Player won on average $%.2f\n", stats.avgWinningBalance - initialBalance);
+		}
+		if (stats.losses > 0) {
+			formatter.format("Player's largest loss: $%d\n", initialBalance - stats.min);
+			formatter.format("Player lost on average $%.2f\n", initialBalance - stats.avgLosingBalance);
+		}
 		formatter.format("Player ended with winning percentage of %.1f%% (%d wins, %d losses)\n", stats.winPercentage*100, stats.wins, stats.losses);
 		formatter.flush();
 		stream.flush();

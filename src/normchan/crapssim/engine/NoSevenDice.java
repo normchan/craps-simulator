@@ -21,8 +21,7 @@ public class NoSevenDice extends Dice {
 		if (countdown > 0) {
 			rollNonSeven();
 			countdown--;
-		}
-		else {
+		} else {
 			die1 = 6;
 			die2 = 1;
 			countdown = goodRolls;

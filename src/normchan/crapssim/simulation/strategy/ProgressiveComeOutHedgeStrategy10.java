@@ -14,14 +14,17 @@ import normchan.crapssim.engine.bets.PassLine;
 import normchan.crapssim.engine.bets.PassOrCome;
 import normchan.crapssim.engine.event.BetEvent;
 import normchan.crapssim.engine.event.RollCompleteEvent;
+import normchan.crapssim.engine.event.SessionEvent;
+import normchan.crapssim.simulation.tracker.ResultTracker;
 
 public class ProgressiveComeOutHedgeStrategy10 extends ProgressiveRollStrategy10 {
 	private boolean hedgeNeeded = false;
-	private boolean hedgeReckoning = false;
 	private List<Come> comeBets = null;
+	private ResultTracker tracker = null;
 	
 	public ProgressiveComeOutHedgeStrategy10(Player player, Layout layout) {
 		super(player, layout);
+		player.addObserver(this);
 	}
 
 	@Override
@@ -37,31 +40,40 @@ public class ProgressiveComeOutHedgeStrategy10 extends ProgressiveRollStrategy10
 	public void update(Observable o, Object arg) {
 		if (arg instanceof BetEvent) {
 			BetEvent.EventType eventType = ((BetEvent)arg).getType();
-			if (hedgeReckoning) {
-				System.out.println("ComeOutHedge: received event "+eventType+" for "+(Bet)o);
-			}
-			
 			if (eventType == BetEvent.EventType.POINT_MADE) {
 				// Come out roll after making point
 				List<Come> comeBets = getComeBets();
-//				System.out.println("ComeOutHedge: number of come bets when point made: "+comeBets.size());
 				if (comeBets.size() > 1) {
 					this.hedgeNeeded = true;
-					this.hedgeReckoning = true;
 					this.comeBets = comeBets;
 					if (layout.getDice().isTrickDice())
 						layout.getDice().toggleTrickDice();
-					System.out.println("ComeOutHedge: hedging...");
+//					System.out.println("ComeOutHedge: hedging...");
 				}
 			} else if (hedgeNeeded && o instanceof PassLine && eventType == BetEvent.EventType.NUMBER_ESTABLISHED) {
 				this.hedgeNeeded = false;
 				this.comeBets = null;
 				if (!layout.getDice().isTrickDice())
 					layout.getDice().toggleTrickDice();
-//				System.out.println("ComeOutHedge: hedge not needed");
 			}
-		} else if (hedgeReckoning && !hedgeNeeded && arg instanceof RollCompleteEvent) {
-			hedgeReckoning = false;
+		} else if (arg instanceof RollCompleteEvent) {
+			if (tracker == null && hedgeNeeded) {
+				// Start tracking results *after* original passline bet is paid off
+				tracker = new ResultTracker(layout);
+			} else if (tracker != null && !hedgeNeeded) {
+				// Finish tracking after the last bets are paid on the point-establishing roll
+				tracker.cleanup();
+				tracker = null;
+			}
+		} else if ((hedgeNeeded || tracker != null) && arg instanceof SessionEvent) {
+			// Clean up at the end of the session
+			if (((SessionEvent)arg).getType() == SessionEvent.EventType.END) {
+				hedgeNeeded = false;
+				if (tracker != null) {
+					tracker.cleanup();
+					tracker = null;
+				}
+			}
 		}
 		super.update(o, arg);
 	}

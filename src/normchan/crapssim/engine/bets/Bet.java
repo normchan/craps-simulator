@@ -36,12 +36,12 @@ public abstract class Bet extends Observable {
 	}
 	
 	protected void betWon(int amount) {
-		notifyObservers(new BetEvent(BetEvent.EventType.WIN, this+" won.  Adding $"+amount+" to player balance."));
+		notifyObservers(new BetEvent(BetEvent.EventType.WIN, this+" won.  Adding $"+amount+" to player balance.", amount));
 		player.payOff(amount);
 	}
 	
 	protected void betLost() {
-		notifyObservers(new BetEvent(BetEvent.EventType.LOSS, this+" lost."));
+		notifyObservers(new BetEvent(BetEvent.EventType.LOSS, this+" lost.", getTotalAmount()));
 	}
 	
 	protected void betPushed() {
