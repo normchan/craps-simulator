@@ -15,23 +15,23 @@ import normchan.crapssim.simulation.tracker.PlayerTracker;
 import normchan.crapssim.simulation.tracker.Tracker;
 
 public class Simulator {
-	private final static int TOTAL_SIMULATION_RUNS = 100;
+	private final static int TOTAL_SIMULATION_RUNS = 1;
 	private static List<GameManager> managers = new ArrayList<GameManager>();
 	private static Tracker tracker = null;
 
 	private final static int[][] DICE_SEQUENCE = { {3, 5}, {5, 3}, {2, 2}, {3, 3}, {1, 3}, {1, 5}, {4, 4}, {2, 2}, {2, 5}, {6, 2}, {4, 4} };
 //	private final static Class[] STRATEGIES = { LayStrategy.class };
-	private final static Class[] STRATEGIES = { ProgressiveComeOutHedgeStrategy10.class, MaxStrategy2.class };
+	private final static Class[] STRATEGIES = { ProgressiveComeOutHedgeStrategy10.class };
 	
 	public static void main(String[] args) {
 		Dice dice = null;
-//		dice = new NoSevenDice(25);
+		dice = new NoSevenDice(25);
 //		dice = new LoadedDice(DICE_SEQUENCE);
 		List<Class> playerStrategyClasses = Arrays.asList( STRATEGIES );
 		for (Class playerStrategyClass : playerStrategyClasses) {
 			try {
 				GameManager manager = new GameManager(dice, playerStrategyClass);
-				manager.setLogGameDetails(false);
+				manager.setLogGameDetails(true);
 				managers.add(manager);
 			} catch (Exception e) {
 				System.err.println("Failed to instantiate GameManager using "+playerStrategyClass.getName()+" class, exiting...");

@@ -34,7 +34,7 @@ public class ResultTracker implements Tracker, Observer {
 	}
 	
 	public void cleanup() {
-//		printResults(System.out);
+		printResults(System.out);
 		for (Observable subject : observeds) {
 			subject.deleteObserver(this);
 		}

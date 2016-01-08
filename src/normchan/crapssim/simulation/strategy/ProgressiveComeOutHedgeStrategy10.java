@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
+import normchan.crapssim.engine.Dice;
 import normchan.crapssim.engine.Layout;
 import normchan.crapssim.engine.Player;
 import normchan.crapssim.engine.bets.AnyCraps;
@@ -48,7 +49,7 @@ public class ProgressiveComeOutHedgeStrategy10 extends ProgressiveRollStrategy10
 					this.comeBets = comeBets;
 					if (layout.getDice().isTrickDice())
 						layout.getDice().toggleTrickDice();
-//					System.out.println("ComeOutHedge: hedging...");
+					System.out.println("ComeOutHedge: hedging...");
 				}
 			} else if (hedgeNeeded && o instanceof PassLine && eventType == BetEvent.EventType.NUMBER_ESTABLISHED) {
 				this.hedgeNeeded = false;
@@ -64,6 +65,13 @@ public class ProgressiveComeOutHedgeStrategy10 extends ProgressiveRollStrategy10
 				// Finish tracking after the last bets are paid on the point-establishing roll
 				tracker.cleanup();
 				tracker = null;
+			}
+		} else if (hedgeNeeded && o instanceof Dice) {
+			System.out.println("ComeOutHedge: dice update: "+layout.getDice().getTotal());
+			if (layout.getDice().getTotal() == 7) {
+				// Rolling seven wipes out all come bets, so hedge is no longer needed
+				this.hedgeNeeded = false;
+				this.comeBets = null;
 			}
 		} else if ((hedgeNeeded || tracker != null) && arg instanceof SessionEvent) {
 			// Clean up at the end of the session
