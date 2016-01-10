@@ -5,35 +5,43 @@ import java.util.List;
 import java.util.Observable;
 
 import normchan.crapssim.engine.Dice;
-import normchan.crapssim.engine.Layout;
-import normchan.crapssim.engine.Player;
+import normchan.crapssim.engine.GameManager;
 import normchan.crapssim.engine.bets.AnyCraps;
 import normchan.crapssim.engine.bets.AnySeven;
 import normchan.crapssim.engine.bets.Bet;
 import normchan.crapssim.engine.bets.Come;
 import normchan.crapssim.engine.bets.PassLine;
-import normchan.crapssim.engine.bets.PassOrCome;
 import normchan.crapssim.engine.event.BetEvent;
 import normchan.crapssim.engine.event.RollCompleteEvent;
 import normchan.crapssim.engine.event.SessionEvent;
 import normchan.crapssim.simulation.tracker.ResultTracker;
 
 public class ProgressiveComeOutHedgeStrategy10 extends ProgressiveRollStrategy10 {
+	private final GameManager gameManager;
 	private boolean hedgeNeeded = false;
+	private boolean control = false;
 	private List<Come> comeBets = null;
 	private ResultTracker tracker = null;
 	
-	public ProgressiveComeOutHedgeStrategy10(Player player, Layout layout) {
-		super(player, layout);
+	public ProgressiveComeOutHedgeStrategy10(GameManager manager) {
+		super(manager);
+		this.gameManager = manager;
+		player.addObserver(this);
+	}
+
+	public ProgressiveComeOutHedgeStrategy10(GameManager manager, boolean control) {
+		super(manager);
+		this.gameManager = manager;
+		this.control = control;
 		player.addObserver(this);
 	}
 
 	@Override
 	protected void beforeRoll() {
 		super.beforeRoll();
-		if (hedgeNeeded) {
-			addBet(new AnySeven(layout, player, unitSize));
-			addBet(new AnyCraps(layout, player, 2));
+		if (hedgeNeeded && !control) {
+			addBet(new AnySeven(layout, player, (int)(0.5*unitSize*comeBets.size())));
+			addBet(new AnyCraps(layout, player, comeBets.size()));
 		}
 	}
 
@@ -49,7 +57,6 @@ public class ProgressiveComeOutHedgeStrategy10 extends ProgressiveRollStrategy10
 					this.comeBets = comeBets;
 					if (layout.getDice().isTrickDice())
 						layout.getDice().toggleTrickDice();
-					System.out.println("ComeOutHedge: hedging...");
 				}
 			} else if (hedgeNeeded && o instanceof PassLine && eventType == BetEvent.EventType.NUMBER_ESTABLISHED) {
 				this.hedgeNeeded = false;
@@ -60,14 +67,13 @@ public class ProgressiveComeOutHedgeStrategy10 extends ProgressiveRollStrategy10
 		} else if (arg instanceof RollCompleteEvent) {
 			if (tracker == null && hedgeNeeded) {
 				// Start tracking results *after* original passline bet is paid off
-				tracker = new ResultTracker(layout);
+				tracker = new ResultTracker(gameManager);
 			} else if (tracker != null && !hedgeNeeded) {
 				// Finish tracking after the last bets are paid on the point-establishing roll
 				tracker.cleanup();
 				tracker = null;
 			}
 		} else if (hedgeNeeded && o instanceof Dice) {
-			System.out.println("ComeOutHedge: dice update: "+layout.getDice().getTotal());
 			if (layout.getDice().getTotal() == 7) {
 				// Rolling seven wipes out all come bets, so hedge is no longer needed
 				this.hedgeNeeded = false;

@@ -1,7 +1,6 @@
 package normchan.crapssim.simulation.strategy;
 
-import normchan.crapssim.engine.Layout;
-import normchan.crapssim.engine.Player;
+import normchan.crapssim.engine.GameManager;
 import normchan.crapssim.engine.bets.Bet;
 import normchan.crapssim.engine.bets.Come;
 import normchan.crapssim.engine.bets.Field;
@@ -10,8 +9,8 @@ import normchan.crapssim.engine.bets.PassOrCome;
 
 public class MaxStrategy extends PlayerStrategy {
 
-	public MaxStrategy(Player player, Layout layout) {
-		super(player, layout);
+	public MaxStrategy(GameManager manager) {
+		super(manager.getPlayer(), manager.getLayout());
 	}
 
 	@Override

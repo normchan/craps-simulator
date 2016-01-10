@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import normchan.crapssim.engine.Player;
+import normchan.crapssim.engine.GameManager;
 import normchan.crapssim.engine.event.SessionEvent;
 
 public class PlayerTracker implements Tracker, Observer {
-	private Player player;
+	private GameManager gameManager;
 	private int initialBalance;
 	private List<Integer> balances = new ArrayList<Integer>();
 	
@@ -33,11 +33,11 @@ public class PlayerTracker implements Tracker, Observer {
 		return stats;
 	}
 
-	public PlayerTracker(Player player, int initialBalance) {
+	public PlayerTracker(GameManager manager, int initialBalance) {
 		super();
-		this.player = player;
+		this.gameManager = manager;
 		this.initialBalance = initialBalance;
-		player.addObserver(this);
+		gameManager.getPlayer().addObserver(this);
 	}
 
 	@Override
@@ -53,9 +53,11 @@ public class PlayerTracker implements Tracker, Observer {
 			formatter.format("Player's largest loss: $%d\n", initialBalance - stats.min);
 			formatter.format("Player lost on average $%.2f\n", initialBalance - stats.avgLosingBalance);
 		}
-		formatter.format("Player ended with winning percentage of %.1f%% (%d wins, %d losses)\n", stats.winPercentage*100, stats.wins, stats.losses);
+		formatter.format("Player ended with winning percentage of %.1f%% (%d wins, %d losses)\n\n", stats.winPercentage*100, stats.wins, stats.losses);
 		formatter.flush();
 		stream.flush();
+		
+		gameManager.aggregateResults();
 	}
 	
 	public void calculateStats() {
@@ -100,7 +102,7 @@ public class PlayerTracker implements Tracker, Observer {
 	public void update(Observable o, Object arg) {
 		if (arg instanceof SessionEvent) {
 			if (((SessionEvent)arg).getType() == SessionEvent.EventType.END)
-				balances.add(new Integer(player.getBalance()));
+				balances.add(new Integer(gameManager.getPlayer().getBalance()));
 		}
 	}
 }

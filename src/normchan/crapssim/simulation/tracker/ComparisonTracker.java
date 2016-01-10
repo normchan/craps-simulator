@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import normchan.crapssim.engine.GameManager;
 import normchan.crapssim.engine.Player;
 
 public class ComparisonTracker implements Tracker {
@@ -18,9 +19,9 @@ public class ComparisonTracker implements Tracker {
 		return tracker2;
 	}
 
-	public ComparisonTracker(Player player1, Player player2, int initialBalance) {
-		this.tracker1 = new PlayerTracker(player1, initialBalance);
-		this.tracker2 = new PlayerTracker(player2, initialBalance);
+	public ComparisonTracker(GameManager manager1, GameManager manager2, int initialBalance) {
+		this.tracker1 = new PlayerTracker(manager1, initialBalance);
+		this.tracker2 = new PlayerTracker(manager2, initialBalance);
 	}
 
 	@Override

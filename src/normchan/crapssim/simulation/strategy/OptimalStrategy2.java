@@ -4,9 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 
-import normchan.crapssim.engine.Dice;
-import normchan.crapssim.engine.Layout;
-import normchan.crapssim.engine.Player;
+import normchan.crapssim.engine.GameManager;
 import normchan.crapssim.engine.bets.Bet;
 import normchan.crapssim.engine.bets.Come;
 import normchan.crapssim.engine.bets.Dont;
@@ -20,8 +18,8 @@ public class OptimalStrategy2 extends PlayerStrategy {
 	private static final int STARTING_ODDS = 1;
 	private Map<Integer, Integer> lastBets = new HashMap<Integer, Integer>();
 
-	public OptimalStrategy2(Player player, Layout layout) {
-		super(player, layout);
+	public OptimalStrategy2(GameManager manager) {
+		super(manager.getPlayer(), manager.getLayout());
 		layout.addObserver(this);
 	}
 

@@ -2,8 +2,7 @@ package normchan.crapssim.simulation.strategy;
 
 import java.util.Observable;
 
-import normchan.crapssim.engine.Layout;
-import normchan.crapssim.engine.Player;
+import normchan.crapssim.engine.GameManager;
 import normchan.crapssim.engine.bets.Lay;
 import normchan.crapssim.engine.event.BetEvent;
 import normchan.crapssim.engine.event.SevenOutEvent;
@@ -13,8 +12,8 @@ public class ProgressiveHedgeStrategy10 extends ProgressiveRollStrategy10 {
 	private boolean hedgeComplete = false;
 	private boolean retractHedge = false;
 	
-	public ProgressiveHedgeStrategy10(Player player, Layout layout) {
-		super(player, layout);
+	public ProgressiveHedgeStrategy10(GameManager manager) {
+		super(manager);
 	}
 
 	@Override

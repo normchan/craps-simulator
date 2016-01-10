@@ -1,7 +1,6 @@
 package normchan.crapssim.simulation.strategy;
 
-import normchan.crapssim.engine.Layout;
-import normchan.crapssim.engine.Player;
+import normchan.crapssim.engine.GameManager;
 import normchan.crapssim.engine.bets.Bet;
 import normchan.crapssim.engine.bets.Dont;
 import normchan.crapssim.engine.bets.DontCome;
@@ -9,8 +8,8 @@ import normchan.crapssim.engine.bets.DontPass;
 
 public class DontStrategy extends PlayerStrategy {
 
-	public DontStrategy(Player player, Layout layout) {
-		super(player, layout);
+	public DontStrategy(GameManager manager) {
+		super(manager.getPlayer(), manager.getLayout());
 	}
 
 	@Override

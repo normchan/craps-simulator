@@ -1,14 +1,13 @@
 package normchan.crapssim.simulation.strategy;
 
-import normchan.crapssim.engine.Layout;
-import normchan.crapssim.engine.Player;
+import normchan.crapssim.engine.GameManager;
 import normchan.crapssim.engine.bets.Field;
 import normchan.crapssim.engine.bets.PassLine;
 
 public class SuckerStrategy extends PlayerStrategy {
 
-	public SuckerStrategy(Player player, Layout layout) {
-		super(player, layout);
+	public SuckerStrategy(GameManager manager) {
+		super(manager.getPlayer(), manager.getLayout());
 	}
 
 	@Override

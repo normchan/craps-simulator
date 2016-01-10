@@ -1,15 +1,14 @@
 package normchan.crapssim.simulation.strategy;
 
-import normchan.crapssim.engine.Layout;
-import normchan.crapssim.engine.Player;
+import normchan.crapssim.engine.GameManager;
 import normchan.crapssim.engine.bets.AnyCraps;
 import normchan.crapssim.engine.bets.Bet;
 import normchan.crapssim.engine.bets.PassLine;
 
 public class PassAnyCrapStrategy extends PlayerStrategy {
 
-	public PassAnyCrapStrategy(Player player, Layout layout) {
-		super(player, layout);
+	public PassAnyCrapStrategy(GameManager manager) {
+		super(manager.getPlayer(), manager.getLayout());
 	}
 
 	@Override

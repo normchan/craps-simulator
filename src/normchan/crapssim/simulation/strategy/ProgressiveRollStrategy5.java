@@ -1,13 +1,12 @@
 package normchan.crapssim.simulation.strategy;
 
-import normchan.crapssim.engine.Layout;
-import normchan.crapssim.engine.Player;
+import normchan.crapssim.engine.GameManager;
 import normchan.crapssim.engine.bets.Come;
 import normchan.crapssim.engine.bets.PassOrCome;
 
 public class ProgressiveRollStrategy5 extends ProgressiveRollStrategy {
-	public ProgressiveRollStrategy5(Player player, Layout layout) {
-		super(player, layout, 5);
+	public ProgressiveRollStrategy5(GameManager manager) {
+		super(manager, 5);
 	}
 
 	@Override

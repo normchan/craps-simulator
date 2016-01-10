@@ -2,15 +2,14 @@ package normchan.crapssim.simulation.strategy;
 
 import java.util.Random;
 
-import normchan.crapssim.engine.Layout;
-import normchan.crapssim.engine.Player;
+import normchan.crapssim.engine.GameManager;
 import normchan.crapssim.engine.bets.Lay;
 
 public class LayStrategy extends PlayerStrategy {
 	private static final Random engine = new Random();
 
-	public LayStrategy(Player player, Layout layout) {
-		super(player, layout);
+	public LayStrategy(GameManager manager) {
+		super(manager.getPlayer(), manager.getLayout());
 	}
 
 	@Override

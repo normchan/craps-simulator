@@ -1,13 +1,12 @@
 package normchan.crapssim.simulation.strategy;
 
-import normchan.crapssim.engine.Layout;
-import normchan.crapssim.engine.Player;
+import normchan.crapssim.engine.GameManager;
 import normchan.crapssim.engine.bets.Field;
 
 public class FieldStrategy extends PlayerStrategy {
 
-	public FieldStrategy(Player player, Layout layout) {
-		super(player, layout);
+	public FieldStrategy(GameManager manager) {
+		super(manager.getPlayer(), manager.getLayout());
 	}
 
 	@Override

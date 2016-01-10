@@ -1,7 +1,6 @@
 package normchan.crapssim.simulation.strategy;
 
-import normchan.crapssim.engine.Layout;
-import normchan.crapssim.engine.Player;
+import normchan.crapssim.engine.GameManager;
 import normchan.crapssim.engine.bets.Bet;
 import normchan.crapssim.engine.bets.Come;
 import normchan.crapssim.engine.bets.PassOrCome;
@@ -10,8 +9,8 @@ public class ProgressiveRollStrategy10 extends ProgressiveRollStrategy {
 	private static final int INCREASE_ODDS_FOLD = 10;
 	private static final int MAX_ODDS_FOLD = 20;
 
-	public ProgressiveRollStrategy10(Player player, Layout layout) {
-		super(player, layout, 10);
+	public ProgressiveRollStrategy10(GameManager manager) {
+		super(manager, 10);
 	}
 
 	@Override

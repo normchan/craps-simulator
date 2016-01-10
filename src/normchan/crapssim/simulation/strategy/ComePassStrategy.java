@@ -1,7 +1,6 @@
 package normchan.crapssim.simulation.strategy;
 
-import normchan.crapssim.engine.Layout;
-import normchan.crapssim.engine.Player;
+import normchan.crapssim.engine.GameManager;
 import normchan.crapssim.engine.bets.Bet;
 import normchan.crapssim.engine.bets.Come;
 import normchan.crapssim.engine.bets.PassLine;
@@ -11,8 +10,8 @@ public class ComePassStrategy extends PlayerStrategy {
 	private final static int MAX_ODDS = -1;
 	private final static int ODDS_FOLD_COUNT = MAX_ODDS;
 
-	public ComePassStrategy(Player player, Layout layout) {
-		super(player, layout);
+	public ComePassStrategy(GameManager manager) {
+		super(manager.getPlayer(), manager.getLayout());
 	}
 
 	@Override

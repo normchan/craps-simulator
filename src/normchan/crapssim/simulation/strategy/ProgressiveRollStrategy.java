@@ -4,8 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 
-import normchan.crapssim.engine.Layout;
-import normchan.crapssim.engine.Player;
+import normchan.crapssim.engine.GameManager;
 import normchan.crapssim.engine.bets.Bet;
 import normchan.crapssim.engine.bets.PassLine;
 import normchan.crapssim.engine.bets.PassOrCome;
@@ -19,8 +18,8 @@ public abstract class ProgressiveRollStrategy extends PlayerStrategy {
 	protected int startBalance = 0;
 	protected Map<Integer, Integer> lastBets = new HashMap<Integer, Integer>();
 
-	public ProgressiveRollStrategy(Player player, Layout layout, int unitSize) {
-		super(player, layout);
+	public ProgressiveRollStrategy(GameManager manager, int unitSize) {
+		super(manager.getPlayer(), manager.getLayout());
 		this.unitSize = unitSize;
 		layout.addObserver(this);
 	}
