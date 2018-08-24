@@ -11,4 +11,9 @@ public class GameEvent {
 	public String getMessage() {
 		return message;
 	}
+	
+	@Override
+	public String toString() {
+		return message;
+	}
 }

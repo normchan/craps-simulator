@@ -81,12 +81,16 @@ public abstract class PassOrCome extends Bet implements NumberBet {
 	}
 	
 	public int getMaxOddsBet() {
-		if (number == 4 || number == 10)
-			return 3 * mainBet;
-		else if (number == 5 || number == 9)
-			return 4 * mainBet;
-		else if (number == 6 || number == 8)
-			return 5 * mainBet;
+		return getMaxOddsBet(number, mainBet);
+	}
+	
+	public static int getMaxOddsBet(int tableNum, int comeorpassBet) {
+		if (tableNum == 4 || tableNum == 10)
+			return 3 * comeorpassBet;
+		else if (tableNum == 5 || tableNum == 9)
+			return 4 * comeorpassBet;
+		else if (tableNum == 6 || tableNum == 8)
+			return 5 * comeorpassBet;
 		else
 			return 0;
 	}

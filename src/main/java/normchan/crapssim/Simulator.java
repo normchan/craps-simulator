@@ -6,15 +6,10 @@ import java.util.List;
 
 import normchan.crapssim.engine.Dice;
 import normchan.crapssim.engine.GameManager;
-import normchan.crapssim.engine.NoSevenDice;
+import normchan.crapssim.evolve.strategy.OddsComeFieldHedgeStrategy4993BigWin;
 import normchan.crapssim.simulation.Controller;
-import normchan.crapssim.simulation.strategy.ControlComeOutHedgeStrategy10;
-import normchan.crapssim.simulation.strategy.MaxStrategy2;
-import normchan.crapssim.simulation.strategy.ProgressiveComeOutHedgeStrategy10;
-import normchan.crapssim.simulation.strategy.ProgressiveRollStrategy10;
 import normchan.crapssim.simulation.tracker.ComparisonTracker;
 import normchan.crapssim.simulation.tracker.PlayerTracker;
-import normchan.crapssim.simulation.tracker.ResultAggregator;
 import normchan.crapssim.simulation.tracker.Tracker;
 
 public class Simulator {
@@ -22,10 +17,13 @@ public class Simulator {
 	private static List<GameManager> managers = new ArrayList<GameManager>();
 	private static Tracker tracker = null;
 
-	private final static int[][] DICE_SEQUENCE = { {3, 5}, {5, 3}, {2, 2}, {3, 3}, {1, 3}, {1, 5}, {4, 4}, {2, 2}, {2, 5}, {6, 2}, {4, 4} };
-//	private final static Class[] STRATEGIES = { LayStrategy.class };
-	private final static Class[] STRATEGIES = { ProgressiveComeOutHedgeStrategy10.class, ControlComeOutHedgeStrategy10.class };
-	
+//	private final static int[][] DICE_SEQUENCE = { {3, 5}, {5, 3}, {2, 2}, {3, 3}, {1, 3}, {1, 5}, {4, 4}, {2, 2}, {2, 5}, {6, 2}, {4, 4} };
+	private final static Class[] STRATEGIES = { OddsComeFieldHedgeStrategy4993BigWin.class };
+//	private final static Class[] STRATEGIES = { OddsComeFieldHedgeStrategy.class, ProgressiveComeOutHedgeStrategy10.class }; //ControlComeOutHedgeStrategy10.class
+//	private final static Class[] STRATEGIES = { OddsComeFieldHedgeStrategy4993BigWin.class, OddsComeFieldHedgeStrategy4993Consistent.class }; //ControlComeOutHedgeStrategy10.class
+
+	//	private final static Class[] STRATEGIES = { DerivedStrategy.class, OddsComeFieldHedgeStrategy.class }; //ControlComeOutHedgeStrategy10.class
+
 	public static void main(String[] args) {
 		Dice dice = null;
 //		dice = new NoSevenDice(25);
