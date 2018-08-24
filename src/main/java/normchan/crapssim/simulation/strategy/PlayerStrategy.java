@@ -12,21 +12,22 @@ import normchan.crapssim.engine.bets.PassOrCome;
 import normchan.crapssim.engine.bets.Place;
 import normchan.crapssim.engine.util.BetNormalizer;
 
+
 public abstract class PlayerStrategy extends Observable implements Observer {
 	protected Player player;
 	protected Layout layout;
-	
+
 	public PlayerStrategy(Player player, Layout layout) {
 		super();
 		this.player = player;
 		this.layout = layout;
 	}
-	
+
 	protected void handlePlaceBet(int number, int amount) {
 		amount = BetNormalizer.normalizePlaceBet(number, amount);
 		PassOrCome poc = layout.getPassOrComeOn(number);
 		Place place = layout.getPlaceOn(number);
-		
+
 		if (poc != null && place != null) {
 			place.retractBet();
 		} else if (poc == null) {
@@ -38,12 +39,12 @@ public abstract class PlayerStrategy extends Observable implements Observer {
 			}
 		}
 	}
-	
+
 	protected void handleBuyBet(int number, int amount) {
 		amount = BetNormalizer.normalizeBuyBet(number, amount);
 		PassOrCome poc = layout.getPassOrComeOn(number);
 		Buy buy = layout.getBuyOn(number);
-		
+
 		if (poc != null && buy != null) {
 			buy.retractBet();
 		} else if (poc == null) {
@@ -54,12 +55,12 @@ public abstract class PlayerStrategy extends Observable implements Observer {
 			}
 		}
 	}
-	
+
 	protected void handleLayBet(int number, int amount) {
 		amount = BetNormalizer.normalizeLayBet(number, amount);
 		PassOrCome poc = layout.getPassOrComeOn(number);
 		Lay lay = layout.getLayOn(number);
-		
+
 		if (poc != null && lay != null) {
 			lay.retractBet();
 		} else if (poc == null) {
@@ -70,7 +71,7 @@ public abstract class PlayerStrategy extends Observable implements Observer {
 			}
 		}
 	}
-	
+
 	protected void handleHardWayBet(int number, int amount) {
 		HardWay existing = layout.getHardWayOn(number);
 		if (existing != null) {
@@ -79,9 +80,15 @@ public abstract class PlayerStrategy extends Observable implements Observer {
 			layout.addBet(new HardWay(layout, player, amount, number));
 		}
 	}
-	
+
+	public Player getPlayer() {
+		return player;
+	}
+
 	public void update(Observable o, Object arg) {
 	}
-	
+
 	public abstract void bet();
+
+
 }
