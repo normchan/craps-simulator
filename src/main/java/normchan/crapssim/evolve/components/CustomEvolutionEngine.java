@@ -216,6 +216,7 @@ public class CustomEvolutionEngine<T> extends GenerationalEvolutionEngine<T> {
 			}
 
 			if (tracker.getSimulationCount() > 100000) {
+				//already significant, don't rerun this candidate
 				return;
 			}
 			GameManager manager = cand.getStrategy().getManager();
@@ -223,9 +224,9 @@ public class CustomEvolutionEngine<T> extends GenerationalEvolutionEngine<T> {
 
 				for (int i = 0; i < CrapsEvolver.TOTAL_SIMULATION_RUNS; i++) {
 
-					if ((i + 1) % 200 == 0 || manager.getPlayer().getPlayerTracker().getSimulationCount() > 1000) {
+					if ((i + 1) % 50 == 0 || manager.getPlayer().getPlayerTracker().getSimulationCount() > 100) {
 						manager.getPlayer().getPlayerTracker().calculateStats();
-						if (manager.getPlayer().getPlayerTracker().getStats().getMean() < 4990) {
+						if (manager.getPlayer().getPlayerTracker().getStats().getMean() < 4950) {
 							break;
 						}
 					}

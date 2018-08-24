@@ -14,7 +14,7 @@ public class CrapsEvaluator implements FitnessEvaluator<CrapsPredictorCreature> 
 		double fitness  =  candidate.getStrategy().getPlayer().getPlayerTracker().getStats().getMean() / candidate.getStrategy().getPlayer().getPlayerTracker().getStats().getStdDeviation();
 
 		
-		if(candidate.getStrategy().getPlayer().getPlayerTracker().getStats().getMean() < GameManager.INITIAL_BALANCE-10) {
+		if(candidate.getStrategy().getPlayer().getPlayerTracker().getStats().getMean() < GameManager.INITIAL_BALANCE-50) {
 			return fitness / 2;
 		}
 		//return a consistent winner.  high balances with low standard deviations.  Simulation count should be fairly meaningless until you get thousands of runs
@@ -24,7 +24,7 @@ public class CrapsEvaluator implements FitnessEvaluator<CrapsPredictorCreature> 
 	}
 
 	/**
-	 * higher scores are more fit when true
+	 * higher scores are more fit when true.
 	 */
 	@Override
 	public boolean isNatural() {

@@ -144,8 +144,8 @@ public class EvolveStrategy extends ProgressiveRollStrategy {
 		this.PASS_LINE_ODDS_BET10 = safeRandom(rng.nextInt(CrapsEvolver.MAX_BET),
 				PassOrCome.getMaxOddsBet(10, PASS_LINE_BET));
 		
-		ANY_SEVEN_MIN_AMOUNT_AT_RISK = safeRandom(rng.nextInt(CrapsEvolver.MAX_BET));
-		ANY_SEVEN_BET = safeRandom(rng.nextInt(CrapsEvolver.MAX_BET));
+		ANY_SEVEN_MIN_AMOUNT_AT_RISK = 0;//safeRandom(rng.nextInt(CrapsEvolver.MAX_BET));
+		ANY_SEVEN_BET = 0;//safeRandom(rng.nextInt(CrapsEvolver.MAX_BET));
 	}
 
 	private Optional<Integer> min(List<Integer> iList) {
